@@ -43,6 +43,7 @@ export default function ProductForm() {
     }
 
     async function fetchProduct() {
+        if (!id) return
         const { data } = await supabase.from('products').select('*').eq('id', id).single()
         if (data) {
             const p = data as Record<string, unknown>

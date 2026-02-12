@@ -25,6 +25,10 @@ export default function ProductDetailPage() {
 
     async function fetchProduct() {
         setLoading(true)
+        if (!slug) {
+            setLoading(false)
+            return
+        }
         const { data } = await supabase.from('products').select('*, categories(nome, slug)').eq('slug', slug).single()
         if (data) {
             const p = { ...data, category: data.categories as unknown as Category } as unknown as Product

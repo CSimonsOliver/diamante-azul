@@ -17,6 +17,10 @@ export default function CategoryPage() {
 
     async function fetchCategory() {
         setLoading(true)
+        if (!slug) {
+            setLoading(false)
+            return
+        }
         const { data: catData } = await supabase.from('categories').select('*').eq('slug', slug).single()
         if (catData) {
             setCategory(catData as unknown as Category)

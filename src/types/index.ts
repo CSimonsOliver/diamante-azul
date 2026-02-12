@@ -92,7 +92,7 @@ export interface OrderItem {
     imagem_url: string | null
 }
 
-export interface ShippingAddress {
+export interface ShippingAddress extends Record<string, string> {
     cep: string
     logradouro: string
     numero: string
