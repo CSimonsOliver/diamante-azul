@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Diamond, Eye, EyeOff } from 'lucide-react'
+import { Diamond, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import './LoginPage.css'
 
@@ -10,32 +10,32 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
     const { signIn } = useAuth()
     const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('Form submitted', { email, password })
+        setError('')
         
         if (!email || !password) {
-            toast.error('Preencha todos os campos')
+            setError('Preencha todos os campos')
             return
         }
 
         setLoading(true)
         try {
             const { error } = await signIn(email, password)
-            console.log('SignIn result', { error })
             
             if (error) {
-                console.error('Login error:', error)
-                toast.error('Email ou senha incorretos: ' + error.message)
+                setError('Usuário ou senha incorretos. Verifique e tente novamente.')
+                toast.error('Usuário ou senha incorretos')
             } else {
                 toast.success('Login realizado com sucesso!')
                 navigate('/admin')
             }
         } catch (err) {
-            console.error('Unexpected error:', err)
+            setError('Erro ao fazer login. Tente novamente.')
             toast.error('Erro inesperado no login')
         } finally {
             setLoading(false)
@@ -54,6 +54,13 @@ export default function LoginPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="login-form">
+                    {error && (
+                        <div className="login-error">
+                            <AlertCircle size={18} />
+                            <span>{error}</span>
+                        </div>
+                    )}
+
                     <div className="form-group">
                         <label className="form-label">Email</label>
                         <input
@@ -62,6 +69,7 @@ export default function LoginPage() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="admin@diamanteazul.com"
                             autoComplete="email"
+                            className={error ? 'input-error' : ''}
                         />
                     </div>
 
@@ -74,6 +82,7 @@ export default function LoginPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Sua senha"
                                 autoComplete="current-password"
+                                className={error ? 'input-error' : ''}
                             />
                             <button
                                 type="button"
@@ -90,7 +99,6 @@ export default function LoginPage() {
                         type="submit"
                         className="btn btn-primary btn-block btn-lg"
                         disabled={loading}
-                        onClick={() => console.log('Button clicked')}
                     >
                         {loading ? 'Entrando...' : 'Entrar'}
                     </button>

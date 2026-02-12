@@ -69,3 +69,30 @@
 .login-eye-btn:hover {
     color: var(--color-text);
 }
+
+.login-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.login-error svg {
+    flex-shrink: 0;
+}
+
+input.input-error {
+    border-color: #dc2626;
+    background-color: #fef2f2;
+}
+
+input.input-error:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
