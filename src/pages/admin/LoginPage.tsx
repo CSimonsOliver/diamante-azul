@@ -15,20 +15,30 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        console.log('Form submitted', { email, password })
+        
         if (!email || !password) {
             toast.error('Preencha todos os campos')
             return
         }
 
         setLoading(true)
-        const { error } = await signIn(email, password)
-        setLoading(false)
-
-        if (error) {
-            toast.error('Email ou senha incorretos')
-        } else {
-            toast.success('Login realizado com sucesso!')
-            navigate('/admin')
+        try {
+            const { error } = await signIn(email, password)
+            console.log('SignIn result', { error })
+            
+            if (error) {
+                console.error('Login error:', error)
+                toast.error('Email ou senha incorretos: ' + error.message)
+            } else {
+                toast.success('Login realizado com sucesso!')
+                navigate('/admin')
+            }
+        } catch (err) {
+            console.error('Unexpected error:', err)
+            toast.error('Erro inesperado no login')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -80,6 +90,7 @@ export default function LoginPage() {
                         type="submit"
                         className="btn btn-primary btn-block btn-lg"
                         disabled={loading}
+                        onClick={() => console.log('Button clicked')}
                     >
                         {loading ? 'Entrando...' : 'Entrar'}
                     </button>
