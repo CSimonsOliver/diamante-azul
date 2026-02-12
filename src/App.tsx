@@ -30,6 +30,7 @@ const ProductsAdminPage = lazy(() => import('@/pages/admin/ProductsAdminPage'))
 const ProductForm = lazy(() => import('@/pages/admin/ProductForm'))
 const OrdersPage = lazy(() => import('@/pages/admin/OrdersPage'))
 const SettingsPage = lazy(() => import('@/pages/admin/SettingsPage'))
+const SeederPage = lazy(() => import('@/pages/admin/SeederPage')) // ADDED SEEDER
 
 function PageLoader() {
     return (
@@ -75,9 +76,9 @@ export default function App() {
                         toastOptions={{
                             duration: 3000,
                             style: {
-                                background: '#1A2744',
+                                background: '#333',
                                 color: '#fff',
-                                borderRadius: '12px',
+                                borderRadius: '8px',
                                 fontSize: '14px',
                             },
                         }}
@@ -94,6 +95,7 @@ export default function App() {
                             <Route path="/sobre" element={<Suspense fallback={<PageLoader />}><AboutPage /></Suspense>} />
                             <Route path="/politica-troca" element={<Suspense fallback={<PageLoader />}><ExchangePolicyPage /></Suspense>} />
                             <Route path="/politica-privacidade" element={<Suspense fallback={<PageLoader />}><PrivacyPolicyPage /></Suspense>} />
+                            <Route path="/seed" element={<Suspense fallback={<PageLoader />}><SeederPage /></Suspense>} />
                             <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
                         </Route>
 

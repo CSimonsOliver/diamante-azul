@@ -1,56 +1,73 @@
+/* Revert to HomePage.tsx structure but with updated class names for circular categories */
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { supabase } from '@/lib/supabase'
 import { useCompanyStore } from '@/stores/companyStore'
-import { ArrowRight, Truck, Shield, Headphones } from 'lucide-react'
+import { ArrowRight, Truck, CreditCard, Award } from 'lucide-react'
 import ProductCard from '@/components/ProductCard'
 import ProductCardSkeleton from '@/components/ProductCardSkeleton'
 import type { Product, Category } from '@/types'
 import './HomePage.css'
 
 export default function HomePage() {
-    const [featured, setFeatured] = useState<Product[]>([])
+    const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(true)
     const { settings } = useCompanyStore()
 
-    useEffect(() => { fetchHome() }, [])
+    useEffect(() => {
+        async function fetchData() {
+            const { data: prods } = await supabase
+                .from('products')
+                .select('*, categories(nome)')
+                .eq('ativo', true)
+                .eq('destaque', true)
+                .limit(8)
 
-    async function fetchHome() {
-        const [prodRes, catRes] = await Promise.all([
-            supabase.from('products').select('*, categories(nome)').eq('destaque', true).eq('ativo', true).limit(8),
-            supabase.from('categories').select('*').eq('ativo', true).order('ordem'),
-        ])
-        const prods = (prodRes.data || []).map((p: Record<string, unknown>) => ({
-            ...p, category: p.categories as unknown as Category,
-        })) as unknown as Product[]
-        setFeatured(prods)
-        setCategories((catRes.data || []) as unknown as Category[])
-        setLoading(false)
-    }
+            const { data: cats } = await supabase
+                .from('categories')
+                .select('*')
+                .eq('ativo', true)
+                .order('ordem')
+                .limit(4)
+
+            if (prods) {
+                const productsWithCat = prods.map((p: any) => ({
+                    ...p,
+                    category: p.categories
+                })) as Product[]
+                setFeaturedProducts(productsWithCat)
+            }
+
+            if (cats) setCategories(cats as Category[])
+            setLoading(false)
+        }
+        fetchData()
+    }, [])
 
     return (
         <>
             <Helmet>
-                <title>{settings?.nome_fantasia || 'Diamante Azul'} — Materiais Hidráulicos</title>
-                <meta name="description" content="Materiais hidráulicos de alta qualidade com os melhores preços. Torneiras, registros, tubos e conexões." />
+                <title>{settings?.nome_fantasia || 'Diamante Azul'} — Torneiras e Metais Sanitários</title>
             </Helmet>
 
             {/* Hero Banner */}
             <section className="hero">
                 <div className="container hero-content">
                     <div className="hero-text">
-                        <h1>Materiais Hidráulicos de <span>Alta Qualidade</span></h1>
-                        <p>Encontre torneiras, registros, tubos e conexões com garantia e os melhores preços do mercado.</p>
+                        <span className="hero-tag">LANÇAMENTO 2026</span>
+                        <h1>Elegância e Sofisticação para sua Casa</h1>
+                        <p>
+                            Descubra nossa nova linha de torneiras gourmet e metais sanitários com design exclusivo e acabamento premium.
+                        </p>
                         <div className="hero-actions">
-                            <Link to="/produtos" className="btn btn-primary btn-lg">
-                                Ver Produtos <ArrowRight size={18} />
-                            </Link>
-                            <Link to="/sobre" className="btn btn-outline btn-lg" style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}>
-                                Sobre Nós
-                            </Link>
+                            <Link to="/produtos" className="btn btn-primary">VER COLEÇÃO COMPLETA</Link>
                         </div>
+                    </div>
+                    <div className="hero-image">
+                        {/* Using a placeholder or the first product image if available */}
+                        <img src="https://images.unsplash.com/photo-1584622050111-993a426fbf0a?auto=format&fit=crop&q=80&w=800" alt="Hero" style={{ width: '100%', borderRadius: 12 }} />
                     </div>
                 </div>
             </section>
@@ -60,70 +77,60 @@ export default function HomePage() {
                 <div className="container">
                     <div className="features-grid">
                         <div className="feature-card">
-                            <div className="feature-icon"><Truck size={24} /></div>
-                            <h3>Entrega Rápida</h3>
-                            <p>Envio para todo o Brasil com rastreamento em tempo real</p>
+                            <div className="feature-icon"><Truck size={32} /></div>
+                            <h3>Frete Grátis</h3>
+                            <p>Para Sul e Sudeste em compras acima de {settings?.frete_gratis_acima ? `R$ ${settings.frete_gratis_acima}` : 'R$ 299,00'}</p>
                         </div>
                         <div className="feature-card">
-                            <div className="feature-icon"><Shield size={24} /></div>
+                            <div className="feature-icon"><CreditCard size={32} /></div>
+                            <h3>Parcelamento</h3>
+                            <p>Em até 10x sem juros no cartão de crédito</p>
+                        </div>
+                        <div className="feature-card">
+                            <div className="feature-icon"><Award size={32} /></div>
                             <h3>Garantia de Qualidade</h3>
-                            <p>Todos os produtos com garantia do fabricante</p>
-                        </div>
-                        <div className="feature-card">
-                            <div className="feature-icon"><Headphones size={24} /></div>
-                            <h3>Suporte Especializado</h3>
-                            <p>Atendimento via WhatsApp para tirar suas dúvidas</p>
+                            <p>Produtos 100% metal com 5 anos de garantia</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Categories */}
-            {categories.length > 0 && (
-                <section className="home-section">
-                    <div className="container">
-                        <div className="section-header">
-                            <div>
-                                <h2 className="section-title">Categorias</h2>
-                                <p className="section-subtitle">Encontre o que você precisa</p>
-                            </div>
-                        </div>
-                        <div className="categories-grid">
-                            {categories.map((cat) => (
-                                <Link to={`/categoria/${cat.slug}`} key={cat.id} className="category-card card">
-                                    {cat.imagem_url ? (
-                                        <img src={cat.imagem_url} alt={cat.nome} className="category-card-img" />
-                                    ) : (
-                                        <div className="category-card-img category-card-placeholder" />
-                                    )}
-                                    <div className="category-card-body">
-                                        <h3>{cat.nome}</h3>
-                                        {cat.descricao && <p>{cat.descricao}</p>}
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* Featured Products */}
-            <section className="home-section" style={{ background: '#fff' }}>
+            <section className="section-container" style={{ padding: '60px 0', background: '#FAFAFA' }}>
                 <div className="container">
                     <div className="section-header">
-                        <div>
-                            <h2 className="section-title">Produtos em Destaque</h2>
-                            <p className="section-subtitle">Seleção especial com os melhores preços</p>
-                        </div>
-                        <Link to="/produtos" className="btn btn-outline">
-                            Ver Todos os Produtos <ArrowRight size={16} />
-                        </Link>
+                        <h2 className="section-title">CATEGORIAS</h2>
                     </div>
-                    <div className="product-grid">
-                        {loading
-                            ? Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)
-                            : featured.map((p) => <ProductCard key={p.id} product={p} />)
-                        }
+                    <div className="categories-grid">
+                        {categories.map((cat) => (
+                            <Link key={cat.id} to={`/categoria/${cat.slug}`} className="category-card">
+                                <div className="category-card-img-wrapper">
+                                    <img src={cat.imagem_url || '/placeholder-product.svg'} alt={cat.nome} className="category-card-img" />
+                                </div>
+                                <h3>{cat.nome}</h3>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Featured Products */}
+            <section className="section-container" style={{ padding: '60px 0 80px' }}>
+                <div className="container">
+                    <div className="section-header">
+                        <h2 className="section-title">DESTAQUES</h2>
+                    </div>
+
+                    <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
+                        {loading ? (
+                            Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)
+                        ) : (
+                            featuredProducts.map((p) => <ProductCard key={p.id} product={p} />)
+                        )}
+                    </div>
+
+                    <div style={{ textAlign: 'center', marginTop: 40 }}>
+                        <Link to="/produtos" className="btn btn-outline" style={{ padding: '12px 40px' }}>VER TODOS OS PRODUTOS</Link>
                     </div>
                 </div>
             </section>

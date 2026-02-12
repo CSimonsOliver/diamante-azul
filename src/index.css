@@ -1,52 +1,51 @@
 :root {
-  /* Modern 2026 Dark Luxury Theme */
+  /* Império-style Color Palette (Light Mode) */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Colors - Dark Luxury */
-  --color-bg: #0a0a0a;
-  --color-bg-subtle: #121212;
-  --color-card: #1a1a1a;
-  --color-card-hover: #222222;
-  --color-border: #2a2a2a;
+  /* Colors derived from screenshots */
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #F8F9FA;
+  --color-card: #FFFFFF;
+  --color-card-hover: #FFFFFF;
+  --color-border: #E5E7EB;
 
-  /* Accents */
-  --color-primary: #3b82f6;
-  /* Electric Blue for modern feel */
-  --color-primary-dark: #2563eb;
-  --color-primary-light: rgba(59, 130, 246, 0.1);
-  --color-secondary: #D4AF37;
-  /* Metallic Gold for "Empire" feel */
-  --color-secondary-light: rgba(212, 175, 55, 0.1);
+  /* Primary Identity */
+  --color-primary: #0088CC;
+  /* Cyan-Blue from reference header */
+  --color-primary-dark: #006699;
+  --color-primary-light: rgba(0, 136, 204, 0.1);
+
+  --color-secondary: #1A1A1A;
+  /* Dark header background */
+  --color-secondary-light: #333333;
 
   /* Text */
-  --color-text: #ffffff;
-  --color-text-muted: #a1a1aa;
-  --color-text-inverted: #000000;
+  --color-text: #333333;
+  --color-text-muted: #666666;
+  --color-text-inverted: #FFFFFF;
 
   /* Functional */
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  --color-success: #10B981;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+  --color-info: #3B82F6;
 
-  /* UI Tokens */
-  --radius-sm: 8px;
-  --radius: 16px;
-  --radius-md: 24px;
-  --radius-lg: 32px;
+  /* Modern Tokens */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
-  --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  --header-height: 80px;
+  --transition: 0.2s ease-in-out;
+  --header-height: auto;
+  /* Variable height due to topbar */
 }
-
-/* Light Mode Overrides (if requested, but sticking to Dark Mode for "2026 modern") */
-/* keeping it dark by default for the "Empire" look */
 
 * {
   box-sizing: border-box;
@@ -56,35 +55,19 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-subtle);
+  /* Slight gray bg for whole page */
   color: var(--color-text);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
 }
 
 /* Layout Utilities */
 .container {
-  max-width: 1280px;
+  max-width: 1360px;
+  /* Wider container like reference */
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
 .flex {
@@ -103,73 +86,39 @@ body {
   justify-content: space-between;
 }
 
-.justify-center {
-  justify-content: center;
-}
-
 .gap-2 {
   gap: 8px;
-}
-
-.gap-4 {
-  gap: 16px;
 }
 
 .mt-4 {
   margin-top: 16px;
 }
 
-.mb-4 {
-  margin-bottom: 16px;
-}
-
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--color-text);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: color var(--transition);
-}
-
-/* Buttons - Modern 2026 Style */
+/* Buttons - Flat & Clean */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: all var(--transition);
   border: none;
-  outline: none;
-}
-
-.btn:active {
-  transform: scale(0.96);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: var(--color-primary);
   color: white;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.5);
-  transform: translateY(-2px);
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -181,179 +130,31 @@ a {
 .btn-outline:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background: var(--color-primary-light);
 }
 
-.btn-danger {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-danger);
-  border: 1px solid transparent;
+/* Typography Overrides */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-secondary);
 }
 
-.btn-danger:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: var(--color-danger);
-}
-
-/* Cards - Glassmorphism */
-.card {
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  transition: all var(--transition);
-  overflow: hidden;
-}
-
-.card:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-}
-
-/* Form Elements */
+/* Input Fields */
 input,
 select,
 textarea {
   width: 100%;
-  padding: 12px 16px;
-  background: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #DDD;
   border-radius: var(--radius-sm);
   color: var(--color-text);
-  font-size: 14px;
-  transition: all var(--transition);
   outline: none;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-  background: var(--color-bg);
-}
-
-label.form-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-muted);
-  margin-bottom: 6px;
-}
-
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.badge-green {
-  background: rgba(16, 185, 129, 0.1);
-  color: #34d399;
-}
-
-.badge-red {
-  background: rgba(239, 68, 68, 0.1);
-  color: #f87171;
-}
-
-.badge-blue {
-  background: rgba(59, 130, 246, 0.1);
-  color: #60a5fa;
-}
-
-.badge-yellow {
-  background: rgba(245, 158, 11, 0.1);
-  color: #fbbf24;
-}
-
-.badge-gray {
-  background: rgba(255, 255, 255, 0.1);
-  color: #d1d5db;
-}
-
-.badge-primary {
-  background: var(--color-primary);
-  color: white;
-}
-
-/* Tables */
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: var(--radius);
-  border: 1px solid var(--color-border);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-th {
-  background: var(--color-bg-subtle);
-  padding: 16px;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  border-bottom: 1px solid var(--color-border);
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-td {
-  padding: 16px;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
-  font-size: 14px;
-}
-
-tr:last-child td {
-  border-bottom: none;
-}
-
-tr:hover td {
-  background: var(--color-card-hover);
-}
-
-/* Skeleton */
-.skeleton {
-  background: linear-gradient(90deg, var(--color-card) 25%, var(--color-bg-subtle) 50%, var(--color-card) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-sm);
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.5s var(--transition) forwards;
 }

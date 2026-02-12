@@ -1,104 +1,66 @@
+/* HomePage - Império Style */
 .hero {
     position: relative;
-    min-height: 80vh;
-    /* Taller hero */
-    display: flex;
-    align-items: center;
-    background: var(--color-bg);
-    overflow: hidden;
-    padding-top: var(--header-height);
+    background: #F4F4F4;
+    /* Light grey bg for hero area */
+    padding: 40px 0;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 40px;
 }
 
-/* Luxurious Gradient Background */
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    right: -10%;
-    width: 60%;
-    height: 120%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 60%);
-    filter: blur(80px);
-    z-index: 0;
-}
-
+.hero::before,
 .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -20%;
-    left: -10%;
-    width: 50%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
-    filter: blur(80px);
-    z-index: 0;
+    display: none;
+    /* Remove gradients from previous theme */
 }
 
 .hero-content {
-    position: relative;
-    z-index: 1;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 40px;
     align-items: center;
 }
 
-.hero-text {
-    max-width: 600px;
-}
-
-.hero-tag {
-    display: inline-block;
-    padding: 6px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-full);
-    font-size: 14px;
-    margin-bottom: 24px;
-    color: var(--color-primary);
-    font-weight: 500;
-    backdrop-filter: blur(4px);
-}
-
+/* Banner Text - Clean & Bold */
 .hero-text h1 {
-    font-size: 64px;
+    font-size: 48px;
     font-weight: 800;
-    line-height: 1.1;
+    color: #333;
+    line-height: 1.2;
     margin-bottom: 24px;
-    letter-spacing: -0.03em;
-    background: linear-gradient(to right, #fff, #a5b4fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    background: none;
+    -webkit-text-fill-color: initial;
 }
 
 .hero-text p {
     font-size: 18px;
+    color: #666;
+    margin-bottom: 32px;
     line-height: 1.6;
-    color: var(--color-text-muted);
-    margin-bottom: 40px;
 }
 
-.hero-actions {
-    display: flex;
-    gap: 16px;
+.hero-tag {
+    display: inline-block;
+    background: #0088CC;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
 }
 
-/* Feature Cards - Floating */
+/* Features Section - White cards with icons */
 .features {
-    padding: 80px 0;
-    background: var(--color-bg);
-    position: relative;
+    padding: 60px 0;
+    background: white;
+    border-bottom: 1px solid #EEE;
 }
 
 .features::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+    display: none;
 }
 
 .features-grid {
@@ -109,42 +71,45 @@
 
 .feature-card {
     padding: 32px;
-    background: var(--color-bg-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    text-align: left;
-    /* Modern Left Align */
+    background: white;
+    border: 1px solid #EEE;
+    border-radius: var(--radius);
+    text-align: center;
     transition: all var(--transition);
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--color-primary);
-    background: linear-gradient(145deg, var(--color-card), var(--color-bg-subtle));
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: #DDD;
 }
 
 .feature-icon {
     width: 64px;
     height: 64px;
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-    color: var(--color-primary);
-    border-radius: var(--radius);
+    background: #F0F9FF;
+    /* Light blue bg */
+    color: #0088CC;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 0 24px 0;
-    /* Left align margin */
+    margin: 0 auto 24px;
     font-size: 24px;
-    box-shadow: var(--shadow-sm);
 }
 
 .feature-card h3 {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 12px;
+    color: #333;
 }
 
-/* Category Cards */
+.feature-card p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Categories - Circular/Clean */
 .categories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -152,44 +117,54 @@
 }
 
 .category-card {
-    position: relative;
-    aspect-ratio: 1;
-    /* Square for modern look */
-    border-radius: var(--radius-md);
-    overflow: hidden;
+    text-decoration: none;
     group: hover;
+    text-align: center;
+}
+
+.category-card-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    /* Circle images like reference */
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 4px solid white;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+}
+
+.category-card:hover .category-card-img-wrapper {
+    border-color: #0088CC;
+    transform: scale(1.05);
 }
 
 .category-card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.category-card:hover .category-card-img {
-    transform: scale(1.1);
+.category-card h3 {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
 }
 
-.category-card-body {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 24px;
+/* Section Headers */
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    color: #0088CC;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
 }
 
-.category-card-body h3 {
-    font-size: 20px;
-    color: white;
-    margin-bottom: 4px;
-}
-
-.category-card-body p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
+.section-header {
+    text-align: center;
 }
 
 @media (max-width: 1024px) {
@@ -198,38 +173,11 @@
         text-align: center;
     }
 
-    .hero-text {
-        margin: 0 auto;
-    }
-
-    .hero-actions {
-        justify-content: center;
-    }
-
-    .feature-card {
-        text-align: center;
-    }
-
-    .feature-icon {
-        margin: 0 auto 24px;
-    }
-
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .hero-text h1 {
-        font-size: 40px;
-    }
-
     .features-grid {
         grid-template-columns: 1fr;
     }
 
-    .hero {
-        min-height: auto;
-        padding: 120px 0 60px;
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
