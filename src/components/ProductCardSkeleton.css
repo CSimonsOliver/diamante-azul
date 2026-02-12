@@ -1,0 +1,43 @@
+.product-skeleton {
+    overflow: hidden;
+}
+
+.product-skeleton-image {
+    aspect-ratio: 1;
+    border-radius: 0;
+}
+
+.product-skeleton-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-skeleton-cat {
+    height: 12px;
+    width: 60%;
+}
+
+.product-skeleton-name {
+    height: 14px;
+    width: 100%;
+}
+
+.product-skeleton-name2 {
+    height: 14px;
+    width: 75%;
+}
+
+.product-skeleton-price {
+    height: 20px;
+    width: 40%;
+    margin-top: 4px;
+}
+
+.product-skeleton-btn {
+    height: 40px;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: var(--radius);
+}
