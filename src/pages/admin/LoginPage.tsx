@@ -28,7 +28,7 @@ export default function LoginPage() {
             toast.error('Email ou senha incorretos')
         } else {
             toast.success('Login realizado com sucesso!')
-            navigate('/admin/dashboard')
+            navigate('/admin')
         }
     }
 

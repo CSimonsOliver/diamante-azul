@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
     LayoutDashboard, Package, FolderOpen, ShoppingBag,
@@ -8,7 +8,7 @@ import { useState } from 'react'
 import './AdminLayout.css'
 
 const NAV_ITEMS = [
-    { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/admin/produtos', icon: Package, label: 'Produtos' },
     { to: '/admin/categorias', icon: FolderOpen, label: 'Categorias' },
     { to: '/admin/pedidos', icon: ShoppingBag, label: 'Pedidos' },
@@ -16,9 +16,17 @@ const NAV_ITEMS = [
 ]
 
 export default function AdminLayout() {
-    const { signOut } = useAuth()
+    const { signOut, user, loading } = useAuth()
     const navigate = useNavigate()
     const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    if (loading) {
+        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>Carregando...</div>
+    }
+
+    if (!user) {
+        return <Navigate to="/admin/login" replace />
+    }
 
     const handleLogout = async () => {
         await signOut()
@@ -29,7 +37,7 @@ export default function AdminLayout() {
         <div className="admin-layout">
             <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="admin-sidebar-header">
-                    <NavLink to="/admin/dashboard" className="admin-logo">
+                    <NavLink to="/admin" className="admin-logo">
                         <Diamond size={22} strokeWidth={2.5} />
                         <span>Admin</span>
                     </NavLink>
