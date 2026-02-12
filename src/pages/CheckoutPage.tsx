@@ -125,11 +125,12 @@ export default function CheckoutPage() {
         try {
             // Save order
             const { error } = await supabase.from('orders').insert({
+                numero_pedido: '',
                 customer_name: data.customer.nome,
                 customer_email: data.customer.email,
                 customer_cpf: data.customer.cpf,
                 customer_phone: data.customer.telefone,
-                shipping_address: data.address,
+                shipping_address: data.address as any,
                 items: items.map((i) => ({
                     product_id: i.product.id, nome: i.product.nome, sku: i.product.sku,
                     preco: i.product.preco_promocional ?? i.product.preco,
