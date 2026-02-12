@@ -12,7 +12,7 @@ export default function Header() {
     const [isCartOpen, setIsCartOpen] = useState(false)
     const [search, setSearch] = useState('')
     const navigate = useNavigate()
-    const totalItems = useCartStore((s) => s.totalItems())
+    const totalItems = useCartStore((s) => s.getTotalItems())
     const { settings } = useCompanyStore()
 
     useEffect(() => {
@@ -105,7 +105,7 @@ export default function Header() {
                 </nav>
             </div>
 
-            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+            <CartDrawer open={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </>
     )
 }
