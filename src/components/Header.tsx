@@ -1,112 +1,111 @@
-import { Link, useLocation } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
-import { ShoppingCart, Search, Menu, X, Diamond, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore } from '@/stores/cartStore'
 import { useCompanyStore } from '@/stores/companyStore'
+import { ShoppingCart, Search, Menu, X, User } from 'lucide-react'
 import CartDrawer from './CartDrawer'
 import './Header.css'
 
 export default function Header() {
-    const [menuOpen, setMenuOpen] = useState(false)
-    const [drawerOpen, setDrawerOpen] = useState(false)
-    const [searchOpen, setSearchOpen] = useState(false)
-    const [searchQuery, setSearchQuery] = useState('')
-    const searchRef = useRef<HTMLInputElement>(null)
-    const location = useLocation()
-    const totalItems = useCartStore((s) => s.getTotalItems())
+    const [isScrolled, setIsScrolled] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isCartOpen, setIsCartOpen] = useState(false)
+    const [search, setSearch] = useState('')
+    const navigate = useNavigate()
+    const totalItems = useCartStore((s) => s.totalItems())
     const { settings } = useCompanyStore()
 
     useEffect(() => {
-        setMenuOpen(false)
-        setSearchOpen(false)
-    }, [location])
+        const handleScroll = () => setIsScrolled(window.scrollY > 20)
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
-    useEffect(() => {
-        if (searchOpen && searchRef.current) {
-            searchRef.current.focus()
-        }
-    }, [searchOpen])
-
-    const handleSearch = (e: React.FormEvent) => {
+    function handleSearch(e: React.FormEvent) {
         e.preventDefault()
-        if (searchQuery.trim()) {
-            window.location.href = `/produtos?busca=${encodeURIComponent(searchQuery.trim())}`
+        if (search.trim()) {
+            navigate(`/produtos?busca=${encodeURIComponent(search)}`)
+            setIsMobileMenuOpen(false)
         }
     }
 
     return (
         <>
-            <header className="header">
-                <div className="header-container container">
-                    <Link to="/" className="header-logo">
-                        <Diamond size={28} strokeWidth={2.5} />
-                        <span>{settings?.nome_fantasia || 'Diamante Azul'}</span>
+            <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+                <div className="container header-content">
+                    <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+                        <Menu size={24} />
+                    </button>
+
+                    <Link to="/" className="logo">
+                        {settings?.logo_url ? (
+                            <img src={settings.logo_url} alt="Logo" />
+                        ) : (
+                            <div className="logo-text">
+                                DIAMANTE<span className="text-secondary">AZUL</span>
+                            </div>
+                        )}
                     </Link>
 
-                    <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
-                        <Link to="/" className="header-nav-link">Início</Link>
-                        <div className="header-nav-dropdown">
-                            <Link to="/produtos" className="header-nav-link">
-                                Produtos <ChevronDown size={14} />
-                            </Link>
-                        </div>
-                        <Link to="/sobre" className="header-nav-link">Sobre</Link>
-                        <Link to="/politica-troca" className="header-nav-link">Trocas</Link>
+                    <form onSubmit={handleSearch} className="search-bar desktop-only">
+                        <input
+                            type="text"
+                            placeholder="O que você procura?"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <button type="button" className="search-icon">
+                            <Search size={18} />
+                        </button>
+                    </form>
+
+                    <nav className="desktop-nav">
+                        <Link to="/" className="nav-link">Início</Link>
+                        <Link to="/produtos" className="nav-link">Produtos</Link>
+                        <Link to="/sobre" className="nav-link">Sobre</Link>
+                        <Link to="/admin" className="nav-btn-icon" title="Login">
+                            <User size={20} />
+                        </Link>
+                        <button className="cart-btn" onClick={() => setIsCartOpen(true)}>
+                            <ShoppingCart size={22} />
+                            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+                        </button>
                     </nav>
 
-                    <div className="header-actions">
-                        <button
-                            className="header-icon-btn"
-                            onClick={() => setSearchOpen(!searchOpen)}
-                            aria-label="Buscar"
-                        >
-                            <Search size={20} />
-                        </button>
-
-                        <button
-                            className="header-icon-btn header-cart-btn"
-                            onClick={() => setDrawerOpen(true)}
-                            aria-label="Carrinho"
-                        >
-                            <ShoppingCart size={20} />
-                            {totalItems > 0 && (
-                                <span className="header-cart-badge">{totalItems}</span>
-                            )}
-                        </button>
-
-                        <button
-                            className="header-menu-btn"
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            aria-label="Menu"
-                        >
-                            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                    <div className="mobile-actions mobile-only">
+                        <button className="cart-btn" onClick={() => setIsCartOpen(true)}>
+                            <ShoppingCart size={22} />
+                            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
                         </button>
                     </div>
                 </div>
-
-                {searchOpen && (
-                    <div className="header-search-bar">
-                        <form onSubmit={handleSearch} className="container header-search-form">
-                            <Search size={18} className="header-search-icon" />
-                            <input
-                                ref={searchRef}
-                                type="text"
-                                placeholder="Buscar produtos..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="header-search-input"
-                            />
-                            <button type="button" onClick={() => setSearchOpen(false)} className="header-search-close">
-                                <X size={18} />
-                            </button>
-                        </form>
-                    </div>
-                )}
             </header>
 
-            <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+            {/* Mobile Menu Overlay */}
+            <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} />
 
-            {menuOpen && <div className="header-overlay" onClick={() => setMenuOpen(false)} />}
+            <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+                <div className="mobile-menu-header">
+                    <span className="mobile-menu-title">Menu</span>
+                    <button onClick={() => setIsMobileMenuOpen(false)}><X size={24} /></button>
+                </div>
+
+                <div className="mobile-search">
+                    <form onSubmit={handleSearch}>
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar produtos..." />
+                        <button type="submit"><Search size={18} /></button>
+                    </form>
+                </div>
+
+                <nav className="mobile-nav-links">
+                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Início</Link>
+                    <Link to="/produtos" onClick={() => setIsMobileMenuOpen(false)}>Produtos</Link>
+                    <Link to="/sobre" onClick={() => setIsMobileMenuOpen(false)}>Sobre Nós</Link>
+                    <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)}>Área do Cliente</Link>
+                </nav>
+            </div>
+
+            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </>
     )
 }
