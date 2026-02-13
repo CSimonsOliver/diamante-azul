@@ -30,7 +30,8 @@ const ProductsAdminPage = lazy(() => import('@/pages/admin/ProductsAdminPage'))
 const ProductForm = lazy(() => import('@/pages/admin/ProductForm'))
 const OrdersPage = lazy(() => import('@/pages/admin/OrdersPage'))
 const SettingsPage = lazy(() => import('@/pages/admin/SettingsPage'))
-const SeederPage = lazy(() => import('@/pages/admin/SeederPage')) // ADDED SEEDER
+const SeederPage = lazy(() => import('@/pages/admin/SeederPage'))
+const HomepageManager = lazy(() => import('@/pages/admin/HomepageManager'))
 
 function PageLoader() {
     return (
@@ -109,6 +110,7 @@ export default function App() {
                             <Route path="produtos/:id" element={<Suspense fallback={<PageLoader />}><ProductForm /></Suspense>} />
                             <Route path="pedidos" element={<Suspense fallback={<PageLoader />}><OrdersPage /></Suspense>} />
                             <Route path="configuracoes" element={<Suspense fallback={<PageLoader />}><SettingsPage /></Suspense>} />
+                            <Route path="homepage" element={<Suspense fallback={<PageLoader />}><HomepageManager /></Suspense>} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

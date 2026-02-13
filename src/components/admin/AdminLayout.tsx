@@ -2,13 +2,14 @@ import { Outlet, NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
     LayoutDashboard, Package, FolderOpen, ShoppingBag,
-    Settings, LogOut, Diamond, Menu, X
+    Settings, LogOut, Diamond, Menu, X, Home
 } from 'lucide-react'
 import { useState } from 'react'
 import './AdminLayout.css'
 
 const NAV_ITEMS = [
     { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/admin/homepage', icon: Home, label: 'HomePage' },
     { to: '/admin/produtos', icon: Package, label: 'Produtos' },
     { to: '/admin/categorias', icon: FolderOpen, label: 'Categorias' },
     { to: '/admin/pedidos', icon: ShoppingBag, label: 'Pedidos' },
