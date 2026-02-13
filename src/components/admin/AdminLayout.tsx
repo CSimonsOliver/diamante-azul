@@ -35,8 +35,19 @@ export default function AdminLayout() {
     }
 
     return (
-        <div className="admin-layout">
-            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="admin-layout" style={{ display: 'flex', minHeight: '100vh', background: '#f5f5f5' }}>
+            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ 
+                width: '250px', 
+                background: '#1a2744', 
+                display: 'flex', 
+                flexDirection: 'column',
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                zIndex: 100,
+                transition: 'transform 300ms ease'
+            }}>
                 <div className="admin-sidebar-header">
                     <NavLink to="/admin" className="admin-logo">
                         <Diamond size={22} strokeWidth={2.5} />

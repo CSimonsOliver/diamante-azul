@@ -6,7 +6,7 @@
 
 .admin-sidebar {
     width: 250px;
-    background: #1a2744;
+    background: #1a2744 !important;
     display: flex;
     flex-direction: column;
     position: fixed;
