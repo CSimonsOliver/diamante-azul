@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { useCompanyStore } from '@/stores/companyStore'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import WhatsAppFab from '@/components/WhatsAppFab'
@@ -102,7 +103,11 @@ export default function App() {
 
                         {/* Admin Routes */}
                         <Route path="/admin/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
-                        <Route path="/admin" element={<AdminLayout />}>
+                        <Route path="/admin" element={
+                            <ErrorBoundary>
+                                <AdminLayout />
+                            </ErrorBoundary>
+                        }>
                             <Route index element={<Suspense fallback={<PageLoader />}><DashboardPage /></Suspense>} />
                             <Route path="categorias" element={<Suspense fallback={<PageLoader />}><CategoriesPage /></Suspense>} />
                             <Route path="produtos" element={<Suspense fallback={<PageLoader />}><ProductsAdminPage /></Suspense>} />

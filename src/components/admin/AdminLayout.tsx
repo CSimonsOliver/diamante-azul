@@ -1,5 +1,6 @@
 import { Outlet, NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import {
     LayoutDashboard, Package, FolderOpen, ShoppingBag,
     Settings, LogOut, Diamond, Menu, X, Home
@@ -35,22 +36,11 @@ export default function AdminLayout() {
     }
 
     return (
-        <div className="admin-layout" style={{ display: 'flex', minHeight: '100vh', background: '#f5f5f5' }}>
-            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ 
-                width: '250px', 
-                background: '#1a2744', 
-                display: 'flex', 
-                flexDirection: 'column',
-                position: 'fixed',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                zIndex: 100,
-                transition: 'transform 300ms ease'
-            }}>
+        <div className="admin-layout">
+            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="admin-sidebar-header">
                     <NavLink to="/admin" className="admin-logo">
-                        <Diamond size={22} strokeWidth={2.5} />
+                        <Diamond size={24} strokeWidth={2.5} />
                         <span>Admin</span>
                     </NavLink>
                     <button className="admin-sidebar-close" onClick={() => setSidebarOpen(false)}>
@@ -63,10 +53,11 @@ export default function AdminLayout() {
                         <NavLink
                             key={to}
                             to={to}
+                            end={to === '/admin'}
                             className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
                             onClick={() => setSidebarOpen(false)}
                         >
-                            <Icon size={18} />
+                            <Icon size={20} />
                             <span>{label}</span>
                         </NavLink>
                     ))}
@@ -74,13 +65,23 @@ export default function AdminLayout() {
 
                 <div className="admin-sidebar-footer">
                     <NavLink to="/" className="admin-nav-link" target="_blank">
-                        <Package size={18} />
+                        <Package size={20} />
                         <span>Ver Loja</span>
                     </NavLink>
                     <button onClick={handleLogout} className="admin-nav-link admin-logout">
-                        <LogOut size={18} />
+                        <LogOut size={20} />
                         <span>Sair</span>
                     </button>
+
+                    <div className="admin-user-info">
+                        <div className="admin-user-avatar">
+                            {user?.email?.[0].toUpperCase()}
+                        </div>
+                        <div className="admin-user-details">
+                            <span className="admin-user-email">{user?.email}</span>
+                            <span className="admin-user-role">Administrador</span>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
@@ -89,11 +90,14 @@ export default function AdminLayout() {
             <main className="admin-main">
                 <header className="admin-topbar">
                     <button className="admin-menu-btn" onClick={() => setSidebarOpen(true)}>
-                        <Menu size={20} />
+                        <Menu size={24} />
                     </button>
+                    <h2 className="admin-page-title-mobile">Painel</h2>
                 </header>
                 <div className="admin-content">
-                    <Outlet />
+                    <ErrorBoundary>
+                        <Outlet />
+                    </ErrorBoundary>
                 </div>
             </main>
         </div>
