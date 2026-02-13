@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import type { Json } from '@/types/database'
 import { ArrowLeft, Plus, Trash2, GripVertical, Eye, EyeOff, Save, ArrowUp, ArrowDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -7,10 +8,10 @@ import './HomepageManager.css'
 
 interface Banner {
   id: string
-  tag: string
+  tag: string | null
   title: string
-  description: string
-  image_url: string
+  description: string | null
+  image_url: string | null
   link_url: string
   button_text: string
   is_active: boolean
@@ -20,8 +21,8 @@ interface Banner {
 interface Section {
   id: string
   section_name: string
-  title: string
-  subtitle: string
+  title: string | null
+  subtitle: string | null
   is_active: boolean
   sort_order: number
 }
@@ -32,7 +33,7 @@ interface Product {
   sku: string
   preco: number
   preco_promocional: number | null
-  imagens: any[]
+  imagens: Json
   ativo: boolean
 }
 
@@ -147,7 +148,11 @@ export default function HomepageManager() {
       // Criar novo
       const { error } = await supabase
         .from('homepage_banners')
-        .insert([{ ...banner, sort_order: banners.length + 1 }])
+        .insert([{ 
+          ...banner, 
+          title: banner.title || '',
+          sort_order: banners.length + 1 
+        }])
       
       if (error) {
         toast.error('Erro ao criar banner')
@@ -412,28 +417,28 @@ export default function HomepageManager() {
                         <label>Título da Seção</label>
                         <input 
                           type="text" 
-                          value={section.title}
+                          value={section.title || ''}
                           onChange={(e) => {
                             const updated = sections.map(s => 
                               s.id === section.id ? { ...s, title: e.target.value } : s
                             )
                             setSections(updated)
                           }}
-                          onBlur={(e) => updateSectionTitle(section.id, e.target.value, section.subtitle)}
+                          onBlur={(e) => updateSectionTitle(section.id, e.target.value, section.subtitle || '')}
                         />
                       </div>
                       <div className="form-group">
                         <label>Subtítulo</label>
                         <input 
                           type="text" 
-                          value={section.subtitle}
+                          value={section.subtitle || ''}
                           onChange={(e) => {
                             const updated = sections.map(s => 
                               s.id === section.id ? { ...s, subtitle: e.target.value } : s
                             )
                             setSections(updated)
                           }}
-                          onBlur={(e) => updateSectionTitle(section.id, section.title, e.target.value)}
+                          onBlur={(e) => updateSectionTitle(section.id, section.title || '', e.target.value)}
                         />
                       </div>
                     </div>
@@ -488,7 +493,7 @@ export default function HomepageManager() {
                               </button>
                             </div>
                             <img 
-                              src={sp.product?.imagens?.[0]?.url || '/placeholder-product.svg'} 
+                              src={(Array.isArray(sp.product?.imagens) && (sp.product.imagens as any[])[0]?.url) || '/placeholder-product.svg'} 
                               alt={sp.product?.nome}
                             />
                             <div className="product-info">
@@ -526,7 +531,7 @@ export default function HomepageManager() {
               <label>Tag (ex: LANÇAMENTO, PROMOÇÃO)</label>
               <input 
                 type="text" 
-                value={editingBanner.tag}
+                value={editingBanner.tag || ''}
                 onChange={(e) => setEditingBanner({...editingBanner, tag: e.target.value})}
               />
             </div>
@@ -535,7 +540,7 @@ export default function HomepageManager() {
               <label>Título *</label>
               <input 
                 type="text" 
-                value={editingBanner.title}
+                value={editingBanner.title || ''}
                 onChange={(e) => setEditingBanner({...editingBanner, title: e.target.value})}
               />
             </div>
@@ -543,7 +548,7 @@ export default function HomepageManager() {
             <div className="form-group">
               <label>Descrição</label>
               <textarea 
-                value={editingBanner.description}
+                value={editingBanner.description || ''}
                 onChange={(e) => setEditingBanner({...editingBanner, description: e.target.value})}
                 rows={3}
               />
@@ -553,7 +558,7 @@ export default function HomepageManager() {
               <label>URL da Imagem *</label>
               <input 
                 type="text" 
-                value={editingBanner.image_url}
+                value={editingBanner.image_url || ''}
                 onChange={(e) => setEditingBanner({...editingBanner, image_url: e.target.value})}
               />
             </div>
@@ -625,7 +630,7 @@ export default function HomepageManager() {
                   }}
                 >
                   <img 
-                    src={product.imagens?.[0]?.url || '/placeholder-product.svg'} 
+                    src={(Array.isArray(product.imagens) && (product.imagens as any[])[0]?.url) || '/placeholder-product.svg'} 
                     alt={product.nome}
                   />
                   <div className="product-selector-info">
